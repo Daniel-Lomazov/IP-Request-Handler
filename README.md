@@ -14,11 +14,13 @@ pwsh> python .\main.py
 pwsh> py -3 .\main.py
 ```
 
-Config knobs (edit in `main.py`):
-- `Network.request_monitoring_time_window` (seconds, default 60)
-- `Network.request_monitoring_threshold` (requests within window, default 10)
-- `Network(size=5)` (number of distinct IPs to simulate)
-- `runs = 100` and the random sleep control the total activity
+Config knobs (current defaults in `main.py`):
+- `Network.request_monitoring_time_window` (seconds, default 10.0)
+- `Network.request_rate_limit` (req/sec, default 2.0)
+- `Network.request_monitoring_threshold` (derived = window * rate)
+- `max_size` (number of devices, default 1)
+- `runs` (iterations, default 100)
+- Random inter-request delay: normalvariate scaled (approx mean ~0.1–0.2s)
 
 What you’ll see:
 - Normal progress is silent. When a single IP exceeds the threshold within the time window, a summary is printed and an interactive prompt appears.
@@ -33,4 +35,11 @@ What you’ll see:
 - Replace prints with `logging` and add a non-interactive mode to avoid blocking on `input()`.
 - Add minimal unit tests for `IPv4.generate()` and `Network.is_suspicious()`.
 - Optionally track a temporary blocklist with an expiry to simulate blocking action.
+
+## TODOs (high-level)
+- Introduce a protocol-based approach (event handlers)
+- Create a handler registry and example runners
+- Add automated tests for processing & rate limit logic
+- Improve docs with usage examples and contribution guide
+- Prepare packaging (pyproject.toml) and CI workflow
 
